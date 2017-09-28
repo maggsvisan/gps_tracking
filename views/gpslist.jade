@@ -1,0 +1,9 @@
+extends layout
+
+block content
+	h3.
+		GPS readings
+	ul
+		each gps, i in gpslist
+			li#gps_list_item
+				a(href="#") #{gps.DATETIME} , #{gps.ID } ,#{gps.GRADOSNORTE}, #{gps.ACCX}, #{gps.ACCY}, #{gps.ACCZ}, #{gps.ROLL}, #{gps.PITCH}, #{gps.YAW}, #{gps.TEMP}, #{gps.LAT}, #{gps.LON} 	

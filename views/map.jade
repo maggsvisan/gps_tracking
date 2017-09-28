@@ -1,0 +1,20 @@
+doctype html
+html
+  head
+
+    meta(name='viewport', content='width=device-width, initial-scale=1.0, user-scalable=no')
+    |     
+    meta(charset='utf-8')
+    | &#x9;
+    title My Google Maps
+    | &#x9;
+    style.
+      #map{
+      height:500px;
+      width:100%;
+      }
+  body
+    #map
+  | &#x9;
+  script(src='js/getMapInfo.js')
+  script(async='', defer='', src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC6I3F71gZ0d9MXM9QZYXiKBaOVzh_fax8&callback=getMapData')

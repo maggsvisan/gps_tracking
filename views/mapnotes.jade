@@ -1,0 +1,59 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    | &#x9;
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    | &#x9;
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+    | &#x9;
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+    | &#x9;
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+    | &#x9;
+    title  Navigation Real Time Map 
+  body
+    nav.navbar.navbar-inverse
+      .container-fluid
+        .navbar-header
+          a.navbar-brand(href='#') Navigation Real Time Map
+        |   
+        ul.nav.navbar-nav
+          li.active
+            a(href='#') Home
+          |     
+          li
+            a(href='#')  Mapa 
+          |     
+          li
+            a(href='#')  Acotaciones de mapa
+          |     
+          li
+            a(href='#') Proyectos futuros
+    | &#x9;
+    link(href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css', rel='stylesheet', type='text/css')
+    .container
+      .row
+        p En esta secci&oacute;n se encuentran las acotaciones de la secci&oacute;n del mapa
+        |         
+        .col-md-8.col-md-offset-2
+          .panel-body(align='center')
+            table.table.table-striped.table-bordered.table-list
+              thead
+                tr(align='center')
+                  th Icono 
+                  |                         
+                  th Tipo
+              |                   
+              tbody
+                tr
+                  td(align='center')
+                    img(src='/images/man.png', alt='', border='3', height='32', width='32')
+                  |                             
+                  td  Operador 
+                |                           
+                tr
+                  td(align='center')
+                    img(src='/images/truck.png', alt='', border='3', height='32', width='32')
+                  |                             
+                  td  Cami&oacute;n 
