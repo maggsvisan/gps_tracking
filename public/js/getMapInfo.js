@@ -1,8 +1,11 @@
+var mongodb=require('mongodb');
+
 function initMap(data){
     
     var options={
         zoom:20,
-        center:{lat:25.650576,lng:-100.288675}
+        center:{lat:25.652050,lng:-100.292239}
+
     }
 /*
     var markers=[
@@ -67,7 +70,7 @@ function initMap(data){
             {   
                 //coords:{ lat: parseFloat(data[k].LAT), lon:parseFloat(data[k].LON)},
                 coords:{lat: parseFloat(value1),lng: parseFloat(value2)},
-                iconImage:'/images/man.png',
+                iconImage:'/images/truck.png',
                 content:'<h1> Camión </h1> <ul>list1</ul>'
                 
             };
@@ -79,7 +82,7 @@ function initMap(data){
         {   
             //coords:{ lat: parseFloat(data[k].LAT), lon:parseFloat(data[k].LON)},
             coords:{lat: parseFloat(value1),lng: parseFloat(value2)},
-            iconImage:'/images/truck.png',
+            iconImage:'/images/man.png',
             content:'<h1> Operador </h1> <ul>list1</ul>'
             
         };
@@ -88,27 +91,16 @@ function initMap(data){
         //Array of markers
     }
 
-//    console.log(markers);
+   console.log(markers);
 
     //new map
     var map= new google.maps.Map(document.getElementById('map'),options);
-/*
+
     //Loop throught markers
     for (var i=0; i<markers.length; i++){
         addMarker(markers[i],i);
     }
-*/  
-  addMarker(markers[6]);
-  //addMarker(markers[2]);
-   // addMarker(markers[0]);
- /*   addMarker(markers[1]);
-  
-    addMarker(markers[3]);
-    addMarker(markers[4]);
-    addMarker(markers[5]);
-  
-    addMarker(markers[7]);
-*/
+
     //Add marker function
     function addMarker(props){
         console.log(props);
@@ -131,20 +123,101 @@ function initMap(data){
         });
 
         }
+    }
+
+    checkPossibleCollision(data);
+    //function checkPossibleCollision(data){
+function checkPossibleCollision(data){
+    
+    var riskDistance = 0.00005; //Security radio for each object in security area
+
+    var collisions = [];
+    var distances = [];
+    var possibleCollisions = [];
+    var distance = 0.0;
+
+    for(i = 0; i < data.length; i++) {
+        console.log("comparison: ",i)
+        if (i < data.length-1){
+            for(j = i; j < data.length; j++) {
+                if (i != j){
+                    distance = Math.sqrt(Math.pow(data[i].LAT-data[j].LAT,2)+Math.pow(data[i].LON-data[j].LON,2));
+                    distances.push(
+                        {
+                            ID1 : data[i].ID,
+                            ID2 : data[j].ID,
+                            DIST : distance,
+                            DATETIME : data[i].DATETIME
+                        });
+                    console.log(data[i].ID,data[j].ID,distance);
+                }
+            }
+        }
         
+    }
+    console.log("Possible collisions: ");
+    for(var i in distances)
+    {
+        if(distances[i].DIST <= riskDistance)
+        {
+            possibleCollisions.push(distances[i]);
+            console.log(distances[i]);
+        }
 
     }
-};
+            console.log(possibleCollisions);        
+    
+    //insertCollisionDB(possibleCollisions);
+    //return possibleCollisions;
+    }
+
+
+    function insertCollisionDB(collision){
+        var MongoClient= mongodb.MongoClient;
+        var url= 'mongodb://localhost:27017/sampsite';
+
+        MongoClient.connect(url, function(err,db){
+            if(err){
+                console.log("Unable to connect to server",err)
+            }
+            else{
+                console.log("Connect to server");
+
+                var collection= db.collection('collisions');
+                var collision1={DATETIME: possibleCollisions[0],ID1: possibleCollisions[1], ID2 : possibleCollisions[2],DIST: possibleCollisions[3] };
+               
+                        // Insert the student data into the database
+            collection.insert([collision1], function (err, result){
+                  
+                  if (err) {
+                    console.log(err);
+                  } 
+                  else {
+                    // Redirect to the updated student list
+                    res.redirect("thelist");
+                  }
+         
+                  // Close the database
+                  db.close();
+                 });
+
+            }
+        });
+
+    }
+
+
+};//cierra toda la función 
 
 
 function getMapData(){
     var response;
     fetch('/gpsReadings')
         .then(function(res) {
-            //console.log(res);
+            console.log(res);
             return res.json();
         }).then(function(data) {
-            //console.log(data);
+            console.log(data);
             initMap(data);
         });
 };
