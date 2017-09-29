@@ -6,7 +6,7 @@ var mongodb=require('mongodb');
 /* GET home page. */
 
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Navigation Real Time Map' });
 });
 
 router.get('/themap',function(req,res){
@@ -15,6 +15,10 @@ router.get('/themap',function(req,res){
 
 router.get('/homepage',function(req,res){
 	res.render('homepage', { title: 'Navigation Tracking System' });
+});
+
+router.get('/future',function(req,res){
+	res.render('future', { title: 'Navigation Tracking System' });
 });
 
 router.get('/mapnotes',function(req,res){
@@ -92,6 +96,39 @@ router.get('/gpsReadings', function(req, res){
 });
 
 
+router.get('/collisions', function(req, res){
+	var MongoClient= mongodb.MongoClient;
+	var url= 'mongodb://localhost:27017/sampsite';
+
+	MongoClient.connect(url, function(err,db){
+		if (err){
+			console.log('Unable to connect to the server',err);
+		}
+
+		else{
+			console.log("Connection Established");
+
+			var collection= db.collection('collisions');
+
+			collection.find({}).toArray(function(err,result){
+			
+			if (err){
+				res.send(err);
+			}
+			else if (result.length){
+				res.render('coList',{"coList" :result});
+			}
+			else{
+				res.send('No documents found');
+			}
+
+			db.close();
+
+			});
+		}
+	});
+});
+
 router.get('/newstudent', function(req,res){
 	res.render('newstudent',{title:'Add Student'});
 });
@@ -129,6 +166,7 @@ router.post('/addstudent',function(req,res){
 	});
 
 });
+
 
 
 module.exports = router;
